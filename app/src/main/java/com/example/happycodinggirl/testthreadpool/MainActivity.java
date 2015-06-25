@@ -57,17 +57,23 @@ public class MainActivity extends ActionBarActivity {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                executorService.shutdownNow();
-                try {
-                    if(executorService.awaitTermination(10L, TimeUnit.SECONDS)){
-                        Log.v("TAG","----awaitTermination return true");
-                    }else{
-                        Log.v("TAG","---awaitTermination return false");
-                    }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        executorService.shutdownNow();
+                        try {
+                            if(executorService.awaitTermination(10L, TimeUnit.SECONDS)){
+                                Log.v("TAG","----awaitTermination return true");
+                            }else{
+                                Log.v("TAG","---awaitTermination return false");
+                            }
 
-                } catch (InterruptedException e) {
-                    Log.v("TAG","----EXCEPTION IS "+e.getMessage());
-                }
+                        } catch (InterruptedException e) {
+                            Log.v("TAG","----EXCEPTION IS "+e.getMessage());
+                        }
+                    }
+                }).start();
+
             }
         });
 
